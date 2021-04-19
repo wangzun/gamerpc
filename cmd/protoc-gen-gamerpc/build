@@ -1,0 +1,3 @@
+#!/bin/bash
+./protoc --proto_path=. --proto_path=pb/ --gamerpc_out=path=gamerpc,name=api:.   pb/*.proto *.proto
+
