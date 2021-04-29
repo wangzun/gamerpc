@@ -33,7 +33,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	gengo "google.golang.org/protobuf/cmd/protoc-gen-go/internal_gengo"
+
+	//gengo "google.golang.org/protobuf/cmd/protoc-gen-go/internal_gengo"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/types/pluginpb"
 )
@@ -41,8 +42,9 @@ import (
 const version = "1.1.0"
 
 var requireUnimplemented *bool
-var packagePath *string
+var pbPath *string
 var packageName *string
+var filePath    *string
 
 func main() {
 	var  BaseGen  *protogen.Plugin
@@ -55,9 +57,10 @@ func main() {
 
 	var flags flag.FlagSet
 	requireUnimplemented = flags.Bool("require_unimplemented_servers", true, "set to false to match legacy behavior")
-	packagePath = flags.String("path","","gamerpc project path")
+	pbPath = flags.String("pbpath","","gamerpc pb path")
 	packageName = flags.String("name","gamerpc","package name")
-
+	filePath    = flags.String("filepath","gamerpc","filepath")
+	index = 100
 	protogen.Options{
 		ParamFunc: flags.Set,
 	}.Run(func(gen *protogen.Plugin) error {
@@ -66,8 +69,8 @@ func main() {
 			if !f.Generate {
 				continue
 			}
-			gengo.GenerateFile(gen, f)
-			generateFile(gen, f)
+			//gengo.GenerateFile(gen, f)
+			//generateFile(gen, f)
 			generate(gen,f)
 		}
 		BaseGen = gen
