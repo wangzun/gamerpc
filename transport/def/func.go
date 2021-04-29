@@ -34,22 +34,12 @@ func (p *bufferPool) put(b *bytes.Buffer) {
 	p.pool.Put(b)
 }
 
-// recvMsg represents the received msg from the transport. All transport
-// protocol specific info has been removed.
+
 type recvMsg struct {
 	buffer *bytes.Buffer
-	// nil: received some data
-	// io.EOF: stream is completed. data is nil.
-	// other non-nil error: transport failure. data is nil.
 	err error
 }
 
-// recvBuffer is an unbounded channel of recvMsg structs.
-//
-// Note: recvBuffer differs from buffer.Unbounded only in the fact that it
-// holds a channel of recvMsg structs instead of objects implementing "item"
-// interface. recvBuffer is written to much more often and using strict recvMsg
-// structs helps avoid allocation in "recvBuffer.put"
 type recvBuffer struct {
 	c       chan recvMsg
 	mu      sync.Mutex
@@ -68,8 +58,6 @@ func (b *recvBuffer) put(r recvMsg) {
 	b.mu.Lock()
 	if b.err != nil {
 		b.mu.Unlock()
-		// An error had occurred earlier, don't accept more
-		// data or errors.
 		return
 	}
 	b.err = r.err
@@ -316,6 +304,7 @@ func (c *controlBuffer) finish() {
 	}
 	c.mu.Unlock()
 }
+
 
 
 
